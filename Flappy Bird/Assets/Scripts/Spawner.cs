@@ -7,6 +7,7 @@ public class Spawner : MonoBehaviour
 
     private float nextSpawnTime;
     private float timer = 0f;
+    private bool isRunning = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,6 +18,11 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isRunning)
+        {
+            return;
+        }
+
         timer += Time.deltaTime;
         if (timer >= nextSpawnTime)
         {
@@ -46,5 +52,10 @@ public class Spawner : MonoBehaviour
     private void SetRandomSpawnTime()
     {
         nextSpawnTime = Random.Range(1.2f, 1.8f);
+    }
+
+    public void Stop()
+    {
+        isRunning = false;
     }
 }

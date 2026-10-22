@@ -7,11 +7,13 @@ public class Bird : MonoBehaviour
     private float jumpSpeed = 5f;
 
     private Rigidbody2D rb;
+    private GameManager gameManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -27,5 +29,12 @@ public class Bird : MonoBehaviour
         {
             rb.linearVelocityY = jumpSpeed;
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("You lost");
+        gameManager.EndGame();
+        Destroy(gameObject);
     }
 }
