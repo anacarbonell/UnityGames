@@ -351,6 +351,7 @@ GameObject:
   - component: {fileID: 996299904}
   - component: {fileID: 996299903}
   - component: {fileID: 996299902}
+  - component: {fileID: 996299905}
   m_Layer: 0
   m_Name: Bird
   m_TagString: Untagged
@@ -459,6 +460,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &996299905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996299901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f888830482e2d910baae55317e818518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bird
+  jumpSpeed: 5
 --- !u!1 &1489122367
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +483,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1489122369}
   - component: {fileID: 1489122368}
+  - component: {fileID: 1489122370}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -550,6 +565,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1489122370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489122367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 578878606e74bc8ea8b994e45bc63352, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScrollLeft
+  speed: 4
 --- !u!1 &1822905281
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,6 +588,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1822905283}
   - component: {fileID: 1822905282}
+  - component: {fileID: 1822905284}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -641,6 +670,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1822905284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822905281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 578878606e74bc8ea8b994e45bc63352, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScrollLeft
+  speed: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
