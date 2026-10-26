@@ -20,7 +20,8 @@ public class Bird : MonoBehaviour
     void Update()
     {
         if (
-            (
+            !PauseManager.gameIsPaused
+            && (
                 Keyboard.current.spaceKey.wasPressedThisFrame
                 || Mouse.current.leftButton.wasPressedThisFrame
             )

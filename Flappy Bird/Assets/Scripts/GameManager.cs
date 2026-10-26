@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI scoreGameOverText;
 
+    [SerializeField]
+    private PauseManager pauseManager;
+
     private int score = 0;
     private float medalRowSpacing = 0.9f;
     private float medalColumnSpacing = 0.8f;
@@ -61,6 +64,8 @@ public class GameManager : MonoBehaviour
         medalList.Clear();
 
         scoreGameOverText.text = String.Format("Has conseguido {0} puntos.", score);
+
+        pauseManager.SetPauseActive(false);
 
         gameOverCanvas.SetActive(true);
         scoreCanvas.SetActive(false);
@@ -98,6 +103,8 @@ public class GameManager : MonoBehaviour
         titleCanvas.SetActive(false);
         gameOverCanvas.SetActive(false);
         scoreCanvas.SetActive(true);
+
+        pauseManager.SetPauseActive(true);
 
         spawner.StartSpawning();
         Instantiate(birdPrefab);
