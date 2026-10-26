@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,30 +19,51 @@ public class GameManager : MonoBehaviour
     private GameObject medalPrefab;
 
     [SerializeField]
-    private float medalRowSpacing = 0.9f;
+    private GameObject titleCanvas;
 
     [SerializeField]
-    private float medalColumnSpacing = 0.8f;
+    private GameObject gameOverCanvas;
 
     [SerializeField]
-    private int medalsPerColumn = 8;
+    private GameObject scoreCanvas;
+
+    [SerializeField]
+    private TextMeshProUGUI scoreGameOverText;
 
     private int score = 0;
+    private float medalRowSpacing = 0.9f;
+    private float medalColumnSpacing = 0.8f;
+    private int medalsPerColumn = 8;
     private List<GameObject> medalList = new List<GameObject>();
+    private bool isRunning = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        Instantiate(birdPrefab);
-        scoreText.text = score.ToString();
-    }
+    void Start() { }
 
     // Update is called once per frame
-    void Update() { }
+    void Update()
+    {
+        if (!isRunning && Keyboard.current[Key.Space].wasPressedThisFrame)
+        {
+            StartGame();
+        }
+    }
 
     public void EndGame()
     {
-        spawner.Stop();
+        isRunning = false;
+        spawner.StopSpawning();
+
+        foreach (GameObject medal in medalList)
+        {
+            Destroy(medal);
+        }
+        medalList.Clear();
+
+        scoreGameOverText.text = String.Format("Has conseguido {0} puntos.", score);
+
+        gameOverCanvas.SetActive(true);
+        scoreCanvas.SetActive(false);
     }
 
     public void AddScore()
@@ -63,5 +86,20 @@ public class GameManager : MonoBehaviour
             GameObject medal = Instantiate(medalPrefab, medalPosition, Quaternion.identity);
             medalList.Add(medal);
         }
+    }
+
+    private void StartGame()
+    {
+        isRunning = true;
+
+        score = 0;
+        scoreText.text = score.ToString();
+
+        titleCanvas.SetActive(false);
+        gameOverCanvas.SetActive(false);
+        scoreCanvas.SetActive(true);
+
+        spawner.StartSpawning();
+        Instantiate(birdPrefab);
     }
 }

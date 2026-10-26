@@ -7,7 +7,7 @@ public class Spawner : MonoBehaviour
 
     private float nextSpawnTime;
     private float timer = 0f;
-    private bool isRunning = true;
+    private bool isRunning = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,23 +29,18 @@ public class Spawner : MonoBehaviour
             timer = 0f;
             SetRandomSpawnTime();
 
-            Vector2 randomPosition = pipesPairPrefab.transform.position;
+            Transform pipesPair = Instantiate(pipesPairPrefab, transform).transform;
+
+            Vector2 randomPosition = pipesPair.position;
             randomPosition.y += Random.Range(-1.5f, 1.5f);
-            GameObject pipesPair = Instantiate(
-                pipesPairPrefab,
-                randomPosition,
-                Quaternion.identity
-            );
+            pipesPair.position = randomPosition;
 
-            Transform topPipe = pipesPair.transform.Find("TopPipe");
-            Vector2 topPipePosition = topPipe.position;
-            topPipePosition.y += Random.Range(-0.5f, 0.5f);
-            topPipe.position = topPipePosition;
-
-            Transform bottomPipe = pipesPair.transform.Find("BottomPipe");
-            Vector2 bottomPipePosition = bottomPipe.position;
-            bottomPipePosition.y += Random.Range(-0.5f, 0.5f);
-            bottomPipe.position = bottomPipePosition;
+            foreach (Transform pipe in pipesPair)
+            {
+                Vector2 pipePosition = pipe.position;
+                pipePosition.y += Random.Range(-0.5f, 0.5f);
+                pipe.position = pipePosition;
+            }
         }
     }
 
@@ -54,7 +49,17 @@ public class Spawner : MonoBehaviour
         nextSpawnTime = Random.Range(1.2f, 1.8f);
     }
 
-    public void Stop()
+    public void StartSpawning()
+    {
+        isRunning = true;
+
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void StopSpawning()
     {
         isRunning = false;
     }
