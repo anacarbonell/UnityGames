@@ -309,7 +309,7 @@ MonoBehaviour:
   winnerText: {fileID: 1081251284}
   goalSound: {fileID: 376296140}
   launchText: {fileID: 102205209}
-  pointsToWin: 2
+  pointsToWin: 5
 --- !u!82 &376296140
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2518,8 +2518,8 @@ MonoBehaviour:
   rb: {fileID: 1649413183}
   speedMod: 1.1
   hitSound: {fileID: 1649413189}
-  wallHitClip: {fileID: 0}
-  paddleHitClip: {fileID: 0}
+  wallHitClip: {fileID: 8300000, guid: c55a6a28720ccb752acfe8390bafeb55, type: 3}
+  paddleHitClip: {fileID: 8300000, guid: 25fe5a6dfcb3d5126aa1eb3b01d663c3, type: 3}
 --- !u!96 &1649413188
 TrailRenderer:
   serializedVersion: 4
