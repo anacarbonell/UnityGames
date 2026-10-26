@@ -33,8 +33,10 @@ public class Bird : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("You lost");
-        gameManager.EndGame();
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            gameManager.EndGame();
+            Destroy(gameObject);
+        }
     }
 }

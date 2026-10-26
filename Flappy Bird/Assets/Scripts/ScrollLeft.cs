@@ -18,9 +18,10 @@ public class ScrollLeft : MonoBehaviour
     void Start()
     {
         startX = transform.position.x;
-        if (loop)
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
         {
-            halfWidth = GetComponent<SpriteRenderer>().bounds.size.x / 2;
+            halfWidth = spriteRenderer.bounds.size.x / 2;
         }
     }
 
