@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     private int score = 0;
     private float medalRowSpacing = 0.9f;
     private float medalColumnSpacing = 0.8f;
-    private int medalsPerColumn = 8;
+    private int medalsPerColumn = 9;
     private List<GameObject> medalList = new List<GameObject>();
     private bool isRunning = false;
     private Bird bird;
@@ -79,15 +79,11 @@ public class GameManager : MonoBehaviour
 
         if (score % 5 == 0)
         {
-            int medalCount = medalList.Count;
+            int columns = medalList.Count / medalsPerColumn;
+            int medalCount = medalList.Count % medalsPerColumn;
             Vector2 medalPosition = medalPrefab.transform.position;
 
-            if (medalCount % medalsPerColumn == 0)
-            {
-                medalPosition.x += medalCount / medalsPerColumn * medalColumnSpacing;
-                medalCount = 0;
-            }
-
+            medalPosition.x += columns * medalColumnSpacing;
             medalPosition.y -= medalCount * medalRowSpacing;
             GameObject medal = Instantiate(medalPrefab, medalPosition, Quaternion.identity);
             medalList.Add(medal);
