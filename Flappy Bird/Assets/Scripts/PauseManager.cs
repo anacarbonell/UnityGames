@@ -8,9 +8,13 @@ public class PauseManager : MonoBehaviour
 
     public static bool gameIsPaused = false;
     private bool canPause = false;
+    private AudioSource pauseSound;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() { }
+    void Start()
+    {
+        pauseSound = GetComponent<AudioSource>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -33,6 +37,7 @@ public class PauseManager : MonoBehaviour
                 pauseCanvas.SetActive(true);
                 Time.timeScale = 0f;
             }
+            pauseSound.Play();
         }
     }
 

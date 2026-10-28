@@ -1,3 +1,4 @@
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,14 +7,22 @@ public class Bird : MonoBehaviour
     [SerializeField]
     private float jumpSpeed = 5f;
 
+    [SerializeField]
+    private AudioClip jumpClip;
+
+    [SerializeField]
+    private AudioClip hurtClip;
+
     private Rigidbody2D rb;
     private GameManager gameManager;
+    private AudioSource audioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -28,6 +37,7 @@ public class Bird : MonoBehaviour
             && transform.position.y < 4
         )
         {
+            audioSource.PlayOneShot(jumpClip);
             rb.linearVelocityY = jumpSpeed;
         }
     }
@@ -37,7 +47,10 @@ public class Bird : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             gameManager.EndGame();
-            Destroy(gameObject);
+            audioSource.PlayOneShot(hurtClip);
+
+            GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(gameObject, 0.6f);
         }
     }
 }
