@@ -135,9 +135,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bird
   jumpSpeed: 5
-  audioSource: {fileID: 0}
   jumpClip: {fileID: 8300000, guid: f9b86c8c86d204f668028dd8164c2499, type: 3}
   hurtClip: {fileID: 8300000, guid: 0da73fde17612973cba9baeb763459eb, type: 3}
+  explosionClip: {fileID: 8300000, guid: 5048be955d26da1b5821429ae700d38e, type: 3}
 --- !u!61 &713305293672106782
 BoxCollider2D:
   m_ObjectHideFlags: 0

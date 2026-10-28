@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     private int medalsPerColumn = 8;
     private List<GameObject> medalList = new List<GameObject>();
     private bool isRunning = false;
+    private Bird bird;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() { }
@@ -91,6 +92,7 @@ public class GameManager : MonoBehaviour
             GameObject medal = Instantiate(medalPrefab, medalPosition, Quaternion.identity);
             medalList.Add(medal);
             Time.timeScale += 0.1f;
+            bird.SetInvincibility(true);
         }
     }
 
@@ -109,6 +111,6 @@ public class GameManager : MonoBehaviour
         pauseManager.SetPauseActive(true);
 
         spawner.StartSpawning();
-        Instantiate(birdPrefab);
+        bird = Instantiate(birdPrefab).GetComponent<Bird>();
     }
 }
