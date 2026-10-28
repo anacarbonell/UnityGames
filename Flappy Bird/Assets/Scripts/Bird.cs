@@ -16,6 +16,7 @@ public class Bird : MonoBehaviour
     private Rigidbody2D rb;
     private GameManager gameManager;
     private AudioSource audioSource;
+    private int lifes = 2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,11 +47,15 @@ public class Bird : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            gameManager.EndGame();
+            lifes--;
             audioSource.PlayOneShot(hurtClip);
 
-            GetComponent<SpriteRenderer>().enabled = false;
-            Destroy(gameObject, 0.6f);
+            if (lifes == 0)
+            {
+                gameManager.EndGame();
+                GetComponent<SpriteRenderer>().enabled = false;
+                Destroy(gameObject, 0.6f);
+            }
         }
     }
 }
