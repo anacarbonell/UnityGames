@@ -74,6 +74,11 @@ public class GameManager : MonoBehaviour
 
     public void AddScore()
     {
+        if (!isRunning)
+        {
+            return;
+        }
+
         score++;
         scoreText.text = score.ToString();
 
