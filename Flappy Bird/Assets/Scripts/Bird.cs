@@ -57,6 +57,15 @@ public class Bird : MonoBehaviour
             audioSource.PlayOneShot(jumpClip);
             rb.linearVelocityY = jumpSpeed;
         }
+
+        if (rb.linearVelocityY > 0)
+        {
+            transform.eulerAngles = new Vector3(0, 0, 10);
+        }
+        else
+        {
+            transform.eulerAngles = new Vector3(0, 0, -10);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
