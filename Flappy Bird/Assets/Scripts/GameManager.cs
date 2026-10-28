@@ -90,12 +90,14 @@ public class GameManager : MonoBehaviour
             medalPosition.y -= medalCount * medalRowSpacing;
             GameObject medal = Instantiate(medalPrefab, medalPosition, Quaternion.identity);
             medalList.Add(medal);
+            Time.timeScale += 0.1f;
         }
     }
 
     private void StartGame()
     {
         isRunning = true;
+        Time.timeScale = 1f;
 
         score = 0;
         scoreText.text = score.ToString();
