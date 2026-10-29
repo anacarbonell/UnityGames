@@ -19,7 +19,7 @@ public class Bird : MonoBehaviour
     private GameManager gameManager;
     private AudioSource audioSource;
     private SpriteRenderer spriteRenderer;
-    private int lifes = 2;
+    private int lives = 2;
     private bool isInvencible = false;
     private float invencibleTimer = 0f;
     private float invencibleTime = 2f;
@@ -89,10 +89,10 @@ public class Bird : MonoBehaviour
 
     private void TakeHit()
     {
-        lifes--;
+        lives--;
         audioSource.PlayOneShot(hurtClip);
 
-        if (lifes == 0)
+        if (lives == 0)
         {
             gameManager.EndGame();
             GetComponent<SpriteRenderer>().enabled = false;

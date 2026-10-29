@@ -34,14 +34,12 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            hitSound.clip = paddleHitClip;
+            hitSound.PlayOneShot(paddleHitClip);
             rb.linearVelocity *= speedMod;
         }
         else
         {
-            hitSound.clip = wallHitClip;
+            hitSound.PlayOneShot(wallHitClip);
         }
-
-        hitSound.Play();
     }
 }
