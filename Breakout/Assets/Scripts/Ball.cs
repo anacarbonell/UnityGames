@@ -13,6 +13,7 @@ public class Ball : MonoBehaviour
     private float minVerticalSpeed = 1.5f;
 
     public Transform paddle;
+    public GameManager gameManager;
 
     private Rigidbody2D rb;
     private bool launched = false;
@@ -67,6 +68,15 @@ public class Ball : MonoBehaviour
             {
                 rb.linearVelocityY = -minVerticalSpeed;
             }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("DeadZone"))
+        {
+            gameManager.LoseLive();
+            Destroy(gameObject);
         }
     }
 }

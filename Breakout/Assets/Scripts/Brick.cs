@@ -7,7 +7,7 @@ public class Brick : MonoBehaviour
     private int lives = 4;
 
     [SerializeField]
-    private List<Sprite> sprites;
+    private List<Sprite> sprites = new List<Sprite>(4);
 
     private SpriteRenderer spriteRenderer;
 
