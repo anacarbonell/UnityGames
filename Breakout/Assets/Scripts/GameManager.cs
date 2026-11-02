@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private int lives = 3;
-
     [SerializeField]
     private GameObject heartPrefab;
 
@@ -16,39 +14,65 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject paddlePrefab;
 
+    private UserDataManager userDataManager;
+    private int currentScene;
+
     private List<Heart> hearts = new List<Heart>();
     private GameObject paddle;
     private int bricksLeft;
+
+    void Awake()
+    {
+        userDataManager = UserDataManager.Instance;
+        currentScene = SceneManager.GetActiveScene().buildIndex;
+
+        if (currentScene == 1)
+        {
+            userDataManager.ResetLives();
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         bricksLeft = GameObject.FindGameObjectsWithTag("Brick").Length;
 
-        for (int i = 0; i < lives; i++)
+        for (int i = 0; i < userDataManager.MaxLives; i++)
         {
             Vector2 position = heartPrefab.transform.position;
             position.x += 0.5f * i;
-            GameObject heart = Instantiate(heartPrefab, position, Quaternion.identity);
-            hearts.Add(heart.GetComponent<Heart>());
+            Heart heart = Instantiate(heartPrefab, position, Quaternion.identity)
+                .GetComponent<Heart>();
+
+            if (i >= userDataManager.Lives)
+            {
+                heart.UpdateSprite(true);
+            }
+            hearts.Add(heart);
         }
 
         InstantiatePrefabs();
     }
 
     // Update is called once per frame
-    void Update() { }
+    void Update()
+    {
+        if (Keyboard.current[Key.L].wasPressedThisFrame)
+        {
+            SceneManager.LoadScene(currentScene + 1);
+        }
+    }
 
     public void LoseLive()
     {
         Destroy(paddle);
-        lives--;
-        for (int i = hearts.Count; i > lives; i--)
+        userDataManager.LoseLive();
+        for (int i = hearts.Count; i > userDataManager.Lives; i--)
         {
             hearts[i - 1].UpdateSprite(true);
         }
 
-        if (lives > 0)
+        if (userDataManager.Lives > 0)
         {
             InstantiatePrefabs();
         }
@@ -63,7 +87,6 @@ public class GameManager : MonoBehaviour
         bricksLeft--;
         if (bricksLeft == 0)
         {
-            int currentScene = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentScene + 1);
         }
     }
