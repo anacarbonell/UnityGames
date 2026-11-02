@@ -6,6 +6,9 @@ public class Paddle : MonoBehaviour
     [SerializeField]
     private float speed = 5f;
 
+    [SerializeField]
+    private AudioClip paddleHitClip;
+
     private Rigidbody2D rb;
     private int movement = 0;
 
@@ -35,5 +38,13 @@ public class Paddle : MonoBehaviour
     void FixedUpdate()
     {
         rb.linearVelocityX = movement * speed;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ball"))
+        {
+            AudioManager.Instance.PlayClip(paddleHitClip);
+        }
     }
 }

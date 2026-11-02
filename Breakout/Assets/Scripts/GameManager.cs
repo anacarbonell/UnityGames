@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject paddlePrefab;
 
+    [SerializeField]
+    private AudioClip levelChangeClip;
+
     private UserDataManager userDataManager;
     private int currentScene;
 
@@ -59,7 +62,7 @@ public class GameManager : MonoBehaviour
     {
         if (Keyboard.current[Key.L].wasPressedThisFrame)
         {
-            SceneManager.LoadScene(currentScene + 1);
+            GoNextScene();
         }
     }
 
@@ -87,8 +90,14 @@ public class GameManager : MonoBehaviour
         bricksLeft--;
         if (bricksLeft == 0)
         {
-            SceneManager.LoadScene(currentScene + 1);
+            GoNextScene();
         }
+    }
+
+    private void GoNextScene()
+    {
+        AudioManager.Instance.PlayClip(levelChangeClip);
+        SceneManager.LoadScene(currentScene + 1);
     }
 
     private void InstantiatePrefabs()

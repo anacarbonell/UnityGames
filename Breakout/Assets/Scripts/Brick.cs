@@ -9,6 +9,12 @@ public class Brick : MonoBehaviour
     [SerializeField]
     private List<Sprite> sprites = new List<Sprite>(4);
 
+    [SerializeField]
+    private AudioClip brickHitClip;
+
+    [SerializeField]
+    private AudioClip brickBrokeClip;
+
     private SpriteRenderer spriteRenderer;
     private GameManager gameManager;
 
@@ -35,10 +41,12 @@ public class Brick : MonoBehaviour
             if (lives > 0)
             {
                 UpdateSprite();
+                AudioManager.Instance.PlayClip(brickHitClip);
             }
             else
             {
                 gameManager.UpdateAndCheckBricks();
+                AudioManager.Instance.PlayClip(brickBrokeClip);
                 Destroy(gameObject);
             }
         }

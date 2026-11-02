@@ -180,3 +180,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Paddle
   speed: 5
+  paddleHitClip: {fileID: 8300000, guid: 2b6b7f463c3f38bb6a44940f727ae99b, type: 3}
