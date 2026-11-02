@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,10 +18,13 @@ public class GameManager : MonoBehaviour
 
     private List<Heart> hearts = new List<Heart>();
     private GameObject paddle;
+    private int bricksLeft;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        bricksLeft = GameObject.FindGameObjectsWithTag("Brick").Length;
+
         for (int i = 0; i < lives; i++)
         {
             Vector2 position = heartPrefab.transform.position;
@@ -50,7 +54,17 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Game Over");
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    public void UpdateAndCheckBricks()
+    {
+        bricksLeft--;
+        if (bricksLeft == 0)
+        {
+            int currentScene = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentScene + 1);
         }
     }
 

@@ -10,6 +10,7 @@ public class Brick : MonoBehaviour
     private List<Sprite> sprites = new List<Sprite>(4);
 
     private SpriteRenderer spriteRenderer;
+    private GameManager gameManager;
 
     void Awake()
     {
@@ -19,6 +20,7 @@ public class Brick : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         UpdateSprite();
     }
 
@@ -36,6 +38,7 @@ public class Brick : MonoBehaviour
             }
             else
             {
+                gameManager.UpdateAndCheckBricks();
                 Destroy(gameObject);
             }
         }
