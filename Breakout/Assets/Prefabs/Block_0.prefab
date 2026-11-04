@@ -185,5 +185,5 @@ MonoBehaviour:
   - {fileID: -415148347, guid: bbbb58c9a7a6b6a98bc33448da7833ed, type: 3}
   - {fileID: -1119469083, guid: bbbb58c9a7a6b6a98bc33448da7833ed, type: 3}
   - {fileID: 819976827, guid: bbbb58c9a7a6b6a98bc33448da7833ed, type: 3}
-  brickHitClip: {fileID: 8300000, guid: 501fb3bfe1bcea805ae1c91e8a20c288, type: 3}
-  brickBrokeClip: {fileID: 8300000, guid: 1797bbca3c1a332d690ef53d7118e8b3, type: 3}
+  brickHitClip: {fileID: 8300000, guid: 1797bbca3c1a332d690ef53d7118e8b3, type: 3}
+  brickBrokeClip: {fileID: 8300000, guid: 501fb3bfe1bcea805ae1c91e8a20c288, type: 3}

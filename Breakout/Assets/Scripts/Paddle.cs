@@ -1,16 +1,26 @@
+using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Paddle : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 5f;
+    private float normalSpeed = 5f;
+
+    [SerializeField]
+    private float boostSpeed = 15f;
 
     [SerializeField]
     private AudioClip paddleHitClip;
 
+    public GameManager gameManager;
+
     private Rigidbody2D rb;
     private int movement = 0;
+    private float speed;
+    private bool speedIsBoosted;
+    private float speedTimer;
+    private float speedTime = 9f;
 
     void Awake()
     {
@@ -18,7 +28,10 @@ public class Paddle : MonoBehaviour
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() { }
+    void Start()
+    {
+        speed = normalSpeed;
+    }
 
     // Update is called once per frame
     void Update()
@@ -33,6 +46,17 @@ public class Paddle : MonoBehaviour
         {
             movement -= 1;
         }
+
+        if (speedIsBoosted)
+        {
+            speedTimer += Time.deltaTime;
+            if (speedTimer > speedTime)
+            {
+                speedIsBoosted = false;
+                speedTimer = 0;
+                speed = normalSpeed;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -45,6 +69,22 @@ public class Paddle : MonoBehaviour
         if (collision.gameObject.CompareTag("Ball"))
         {
             AudioManager.Instance.PlayClip(paddleHitClip);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject powerUp = collision.gameObject;
+        if (powerUp.CompareTag("PowerUp_0"))
+        {
+            Destroy(powerUp);
+            gameManager.AddBall(true);
+        }
+        else if (powerUp.CompareTag("PowerUp_1"))
+        {
+            Destroy(powerUp);
+            speedIsBoosted = true;
+            speed = boostSpeed;
         }
     }
 }

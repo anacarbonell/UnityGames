@@ -48,3 +48,6 @@ MonoBehaviour:
   ballPrefab: {fileID: 6796300164290375548, guid: a3781f4b7cf70790d9642e3756d1a8f6, type: 3}
   paddlePrefab: {fileID: 7030623204448561445, guid: 49805e1b06f511f9b8d1f1392584bcfa, type: 3}
   levelChangeClip: {fileID: 8300000, guid: c1e6a6c7756c6895882b4b65b5803cc4, type: 3}
+  powerUpPrefabs:
+  - {fileID: 0}
+  - {fileID: 0}

@@ -2487,6 +2487,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8316054944528845868, guid: 951a04f3d4e91fd85b19019439f1be42, type: 3}
+      propertyPath: powerUpPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8316054944528845868, guid: 951a04f3d4e91fd85b19019439f1be42, type: 3}
+      propertyPath: 'powerUpPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 222012657501909254, guid: 54f5f93b4a389ef13af1329e030bad45, type: 3}
+    - target: {fileID: 8316054944528845868, guid: 951a04f3d4e91fd85b19019439f1be42, type: 3}
+      propertyPath: 'powerUpPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 222012657501909254, guid: 44cbdd038fe73f80196a8fd378991dca, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

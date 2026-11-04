@@ -45,7 +45,7 @@ public class Brick : MonoBehaviour
             }
             else
             {
-                gameManager.UpdateAndCheckBricks();
+                gameManager.ManageBreakingBrick(transform.position);
                 AudioManager.Instance.PlayClip(brickBrokeClip);
                 Destroy(gameObject);
             }

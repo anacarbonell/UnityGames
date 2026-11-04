@@ -17,12 +17,17 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private AudioClip levelChangeClip;
 
+    [SerializeField]
+    private List<GameObject> powerUpPrefabs = new List<GameObject>(2);
+
     private UserDataManager userDataManager;
     private int currentScene;
 
     private List<Heart> hearts = new List<Heart>();
     private GameObject paddle;
     private int bricksLeft;
+    private List<GameObject> powerUps = new List<GameObject>();
+    private int ballsLeft = 0;
 
     void Awake()
     {
@@ -64,9 +69,31 @@ public class GameManager : MonoBehaviour
         {
             GoNextScene();
         }
+
+        for (int i = 0; i < powerUps.Count; i++)
+        {
+            if (powerUps[i] == null)
+            {
+                powerUps.RemoveAt(i);
+            }
+            else if (powerUps[i].transform.position.y < -5.5f)
+            {
+                Destroy(powerUps[i]);
+                powerUps.RemoveAt(i);
+            }
+        }
     }
 
-    public void LoseLive()
+    public void DestroyBall()
+    {
+        ballsLeft--;
+        if (ballsLeft == 0)
+        {
+            LoseLive();
+        }
+    }
+
+    private void LoseLive()
     {
         Destroy(paddle);
         userDataManager.LoseLive();
@@ -77,6 +104,11 @@ public class GameManager : MonoBehaviour
 
         if (userDataManager.Lives > 0)
         {
+            foreach (GameObject powerUp in powerUps)
+            {
+                Destroy(powerUp);
+            }
+            powerUps.Clear();
             InstantiatePrefabs();
         }
         else
@@ -85,12 +117,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpdateAndCheckBricks()
+    public void ManageBreakingBrick(Vector2 position)
     {
         bricksLeft--;
         if (bricksLeft == 0)
         {
             GoNextScene();
+        }
+        SpawnPowerUp(position);
+    }
+
+    private void SpawnPowerUp(Vector2 position)
+    {
+        int randomPowerUp = Random.Range(0, 100);
+        float powerUpPercent = 40f / powerUpPrefabs.Count;
+        for (int i = 0; i < powerUpPrefabs.Count; i++)
+        {
+            if (randomPowerUp < powerUpPercent * (i + 1))
+            {
+                GameObject powerUp = Instantiate(powerUpPrefabs[i], position, Quaternion.identity);
+                powerUps.Add(powerUp);
+                break;
+            }
         }
     }
 
@@ -103,8 +151,16 @@ public class GameManager : MonoBehaviour
     private void InstantiatePrefabs()
     {
         paddle = Instantiate(paddlePrefab);
+        paddle.GetComponent<Paddle>().gameManager = this;
+        AddBall(false);
+    }
+
+    public void AddBall(bool launch)
+    {
         Ball ball = Instantiate(ballPrefab).GetComponent<Ball>();
         ball.paddle = paddle.transform;
         ball.gameManager = this;
+        ball.launchAtStart = launch;
+        ballsLeft++;
     }
 }

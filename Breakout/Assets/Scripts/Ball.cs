@@ -14,6 +14,7 @@ public class Ball : MonoBehaviour
 
     public Transform paddle;
     public GameManager gameManager;
+    public bool launchAtStart;
 
     private Rigidbody2D rb;
     private bool launched = false;
@@ -25,7 +26,10 @@ public class Ball : MonoBehaviour
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() { }
+    void Start()
+    {
+        transform.position = paddle.position + Vector3.up * heightOverPaddle;
+    }
 
     // Update is called once per frame
     void Update()
@@ -38,7 +42,7 @@ public class Ball : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!launched && launchRequested)
+        if (!launched && (launchRequested || launchAtStart))
         {
             Launch();
         }
@@ -75,7 +79,7 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("DeadZone"))
         {
-            gameManager.LoseLive();
+            gameManager.DestroyBall();
             Destroy(gameObject);
         }
     }
