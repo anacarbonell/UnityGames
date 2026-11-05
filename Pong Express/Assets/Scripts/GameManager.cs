@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
         Ready,
         Playing,
         GameOver,
+        Paused,
     }
 
     private GameState state = GameState.ModeSelection;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     public AudioSource goalSound;
     public TextMeshProUGUI launchText;
     public Canvas modeSelectionCanvas;
+    public Canvas pauseCanvas;
 
     public int pointsToWin;
 
@@ -53,6 +55,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GameOver:
                 UpdateGameOver();
+                break;
+            case GameState.Paused:
+                UpdatePaused();
                 break;
             default:
                 break;
@@ -88,7 +93,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UpdatePlaying() { }
+    void UpdatePlaying()
+    {
+        if (Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            Time.timeScale = 0f;
+            pauseCanvas.gameObject.SetActive(true);
+            state = GameState.Paused;
+        }
+    }
 
     void UpdateGameOver()
     {
@@ -100,6 +113,16 @@ public class GameManager : MonoBehaviour
             modeSelectionCanvas.gameObject.SetActive(true);
 
             state = GameState.ModeSelection;
+        }
+    }
+
+    void UpdatePaused()
+    {
+        if (Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            Time.timeScale = 1f;
+            pauseCanvas.gameObject.SetActive(false);
+            state = GameState.Playing;
         }
     }
 
