@@ -6,21 +6,25 @@ public class GameManager : MonoBehaviour
 {
     enum GameState
     {
+        ModeSelection,
         Ready,
         Playing,
         GameOver,
     }
 
-    private GameState state = GameState.Ready;
+    private GameState state = GameState.ModeSelection;
 
     public Ball ball;
     public Paddle player1Paddle;
-    public Paddle player2Paddle;
+    private Paddle player2Paddle;
+    public ManualPaddle player2Manual;
+    public AutoPaddle player2Auto;
     public TextMeshProUGUI player1ScoreText;
     public TextMeshProUGUI player2ScoreText;
     public TextMeshProUGUI winnerText;
     public AudioSource goalSound;
     public TextMeshProUGUI launchText;
+    public Canvas modeSelectionCanvas;
 
     public int pointsToWin;
 
@@ -38,6 +42,9 @@ public class GameManager : MonoBehaviour
     {
         switch (state)
         {
+            case GameState.ModeSelection:
+                UpdateModeSelection();
+                break;
             case GameState.Ready:
                 UpdateReady();
                 break;
@@ -52,6 +59,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void UpdateModeSelection()
+    {
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+            SelectMode(true);
+        }
+
+        if (Keyboard.current.digit2Key.wasPressedThisFrame)
+        {
+            SelectMode(false);
+        }
+    }
+
     void UpdateReady()
     {
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -60,33 +80,54 @@ public class GameManager : MonoBehaviour
             launchText.gameObject.SetActive(false);
             ball.Launch(launchDirectionX);
         }
-        ResetState();
+
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            ResetState();
+            state = GameState.Ready;
+        }
     }
 
     void UpdatePlaying() { }
 
     void UpdateGameOver()
     {
-        ResetState();
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            ResetState();
+
+            winnerText.gameObject.SetActive(false);
+            modeSelectionCanvas.gameObject.SetActive(true);
+
+            state = GameState.ModeSelection;
+        }
+    }
+
+    private void SelectMode(bool isSinglePlayer)
+    {
+        player2Auto.enabled = isSinglePlayer;
+        player2Manual.enabled = !isSinglePlayer;
+        player2Paddle = isSinglePlayer ? player2Auto : player2Manual;
+        StartGame();
+    }
+
+    private void StartGame()
+    {
+        player1Paddle.enabled = true;
+        modeSelectionCanvas.gameObject.SetActive(false);
+        launchText.gameObject.SetActive(true);
+        state = GameState.Ready;
     }
 
     private void ResetState()
     {
-        if (Keyboard.current.nKey.wasPressedThisFrame)
-        {
-            player1Goals = 0;
-            player2Goals = 0;
-            player1ScoreText.text = player1Goals.ToString();
-            player2ScoreText.text = player2Goals.ToString();
+        player1Goals = 0;
+        player2Goals = 0;
+        player1ScoreText.text = player1Goals.ToString();
+        player2ScoreText.text = player2Goals.ToString();
 
-            winnerText.gameObject.SetActive(false);
-            launchText.gameObject.SetActive(true);
-
-            player1Paddle.ResetSize();
-            player2Paddle.ResetSize();
-
-            state = GameState.Ready;
-        }
+        player1Paddle.ResetSize();
+        player2Paddle.ResetSize();
     }
 
     public void Player1Scores()
