@@ -1568,6 +1568,7 @@ GameObject:
   - component: {fileID: 1260014470}
   - component: {fileID: 1260014469}
   - component: {fileID: 1260014473}
+  - component: {fileID: 1260014474}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player
@@ -1730,7 +1731,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1260014468}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1924e2f63f0df23debe3f52ec3ff0c0f, type: 3}
   m_Name: 
@@ -1740,6 +1741,24 @@ MonoBehaviour:
   rb: {fileID: 1260014469}
   minSize: 1
   mazSize: 3
+--- !u!114 &1260014474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260014468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615db2442862c644c910293647b3458b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoPaddle
+  isPlayer1: 0
+  speed: 5
+  rb: {fileID: 1260014469}
+  minSize: 1
+  mazSize: 3
+  ball: {fileID: 1649413187}
 --- !u!1 &1266397951
 GameObject:
   m_ObjectHideFlags: 0
