@@ -9,19 +9,19 @@ public class Paddle : MonoBehaviour
     public float minSize;
     public float mazSize;
 
-    private Vector3 startPosition;
+    public Vector3 StartPosition { get; private set; }
     private Vector3 startSize;
 
     protected virtual void Awake()
     {
-        startPosition = transform.position;
+        StartPosition = transform.position;
         startSize = transform.localScale;
     }
 
     public void ResetPosition()
     {
         rb.linearVelocity = Vector2.zero;
-        transform.position = startPosition;
+        transform.position = StartPosition;
     }
 
     public void ChangeSize(float amount)

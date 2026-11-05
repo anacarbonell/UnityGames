@@ -7,7 +7,7 @@ public class AutoPaddle : Paddle
     {
         base.Awake();
         StateMachine = new AutoPaddleFSM(this);
-        StateMachine.Initialize(StateMachine.Active);
+        StateMachine.Initialize(StateMachine.Idle);
     }
 
     void Update()

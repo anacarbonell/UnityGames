@@ -9,12 +9,21 @@ public class ActiveState : IState
         this.paddle = paddle;
     }
 
-    public void Enter() { }
+    public void Enter()
+    {
+        Debug.Log("CPU: Active");
+    }
 
     public void Exit() { }
 
     public void FixedUpdate()
     {
+        if (paddle.ball.rb.linearVelocityX <= 0)
+        {
+            paddle.StateMachine.TransitionTo(paddle.StateMachine.Idle);
+            return;
+        }
+
         float difference = paddle.ball.transform.position.y - paddle.transform.position.y;
         float movement = 0f;
 
