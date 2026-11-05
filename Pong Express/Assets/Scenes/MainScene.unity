@@ -1732,9 +1732,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1260014468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cc2c3d38dafbbd2bb5a994bd60c79f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 1924e2f63f0df23debe3f52ec3ff0c0f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Paddle
+  m_EditorClassIdentifier: Assembly-CSharp::ManualPaddle
   isPlayer1: 0
   speed: 5
   rb: {fileID: 1260014469}
@@ -2324,9 +2324,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1575023698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cc2c3d38dafbbd2bb5a994bd60c79f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 1924e2f63f0df23debe3f52ec3ff0c0f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Paddle
+  m_EditorClassIdentifier: Assembly-CSharp::ManualPaddle
   isPlayer1: 1
   speed: 5
   rb: {fileID: 1575023699}

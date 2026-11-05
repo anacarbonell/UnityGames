@@ -12,44 +12,10 @@ public class Paddle : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 startSize;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected virtual void Awake()
     {
         startPosition = transform.position;
         startSize = transform.localScale;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        float movement = 0f;
-
-        if (isPlayer1)
-        {
-            if (Keyboard.current[Key.W].isPressed)
-            {
-                movement++;
-            }
-
-            if (Keyboard.current[Key.S].isPressed)
-            {
-                movement--;
-            }
-        }
-        else
-        {
-            if (Keyboard.current[Key.UpArrow].isPressed)
-            {
-                movement++;
-            }
-
-            if (Keyboard.current[Key.DownArrow].isPressed)
-            {
-                movement--;
-            }
-        }
-
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, movement * speed);
     }
 
     public void ResetPosition()
