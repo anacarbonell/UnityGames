@@ -4,6 +4,15 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
+    enum GameState
+    {
+        Ready,
+        Playing,
+        GameOver,
+    }
+
+    private GameState state = GameState.Ready;
+
     public Ball ball;
     public Paddle player1Paddle;
     public Paddle player2Paddle;
@@ -18,9 +27,6 @@ public class GameManager : MonoBehaviour
     private int player1Goals = 0;
     private int player2Goals = 0;
 
-    private bool waitingForLaunch = true;
-    private bool isGameFinished;
-
     private float launchDirectionX;
 
     void Start()
@@ -30,18 +36,56 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (waitingForLaunch)
+        switch (state)
         {
-            if (!isGameFinished && Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                waitingForLaunch = false;
-                launchText.gameObject.SetActive(false);
-                ball.Launch(launchDirectionX);
-            }
-            else if (Keyboard.current.nKey.wasPressedThisFrame)
-            {
-                ResetState();
-            }
+            case GameState.Ready:
+                UpdateReady();
+                break;
+            case GameState.Playing:
+                UpdatePlaying();
+                break;
+            case GameState.GameOver:
+                UpdateGameOver();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void UpdateReady()
+    {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            state = GameState.Playing;
+            launchText.gameObject.SetActive(false);
+            ball.Launch(launchDirectionX);
+        }
+        ResetState();
+    }
+
+    void UpdatePlaying() { }
+
+    void UpdateGameOver()
+    {
+        ResetState();
+    }
+
+    private void ResetState()
+    {
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            player1Goals = 0;
+            player2Goals = 0;
+            player1ScoreText.text = player1Goals.ToString();
+            player2ScoreText.text = player2Goals.ToString();
+
+            winnerText.gameObject.SetActive(false);
+            launchText.gameObject.SetActive(true);
+
+            player1Paddle.ResetSize();
+            player2Paddle.ResetSize();
+
+            state = GameState.Ready;
         }
     }
 
@@ -60,6 +104,10 @@ public class GameManager : MonoBehaviour
         {
             ShowWinner(true);
         }
+        else
+        {
+            state = GameState.Ready;
+        }
     }
 
     public void Player2Scores()
@@ -77,6 +125,10 @@ public class GameManager : MonoBehaviour
         {
             ShowWinner(false);
         }
+        else
+        {
+            state = GameState.Ready;
+        }
     }
 
     private void ChangePaddleSizes(bool player1Scored)
@@ -91,13 +143,12 @@ public class GameManager : MonoBehaviour
         ball.ResetPosition();
         player1Paddle.ResetPosition();
         player2Paddle.ResetPosition();
-        waitingForLaunch = true;
         launchText.gameObject.SetActive(true);
     }
 
     private void ShowWinner(bool isPlayer1)
     {
-        isGameFinished = true;
+        state = GameState.GameOver;
         if (isPlayer1)
         {
             winnerText.text = "¡Gana el jugador 1!";
@@ -111,21 +162,5 @@ public class GameManager : MonoBehaviour
 
         launchText.gameObject.SetActive(false);
         winnerText.gameObject.SetActive(true);
-    }
-
-    private void ResetState()
-    {
-        player1Goals = 0;
-        player2Goals = 0;
-        player1ScoreText.text = player1Goals.ToString();
-        player2ScoreText.text = player2Goals.ToString();
-
-        winnerText.gameObject.SetActive(false);
-        launchText.gameObject.SetActive(true);
-
-        player1Paddle.ResetSize();
-        player2Paddle.ResetSize();
-
-        isGameFinished = false;
     }
 }
