@@ -1,6 +1,7 @@
 public class AutoPaddle : Paddle
 {
     public Ball ball;
+    public GameManager gameManager;
     public AutoPaddleFSM StateMachine { get; private set; }
 
     protected override void Awake()

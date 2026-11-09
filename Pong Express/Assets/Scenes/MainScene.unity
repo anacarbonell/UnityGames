@@ -2180,6 +2180,7 @@ MonoBehaviour:
   minSize: 1
   mazSize: 3
   ball: {fileID: 1649413187}
+  gameManager: {fileID: 376296139}
 --- !u!1 &1266397951
 GameObject:
   m_ObjectHideFlags: 0

@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     {
         if (Keyboard.current.digit1Key.wasPressedThisFrame)
         {
+            launchDirectionX = 1;
             SelectMode(true);
         }
 
@@ -79,11 +80,12 @@ public class GameManager : MonoBehaviour
 
     void UpdateReady()
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (
+            Keyboard.current.spaceKey.wasPressedThisFrame
+            && (player2Manual.enabled || launchDirectionX == 1)
+        )
         {
-            state = GameState.Playing;
-            launchText.gameObject.SetActive(false);
-            ball.Launch(launchDirectionX);
+            LaunchBall();
         }
 
         if (Keyboard.current.nKey.wasPressedThisFrame)
@@ -126,6 +128,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void LaunchBall()
+    {
+        state = GameState.Playing;
+        launchText.gameObject.SetActive(false);
+        ball.Launch(launchDirectionX);
+    }
+
     private void SelectMode(bool isSinglePlayer)
     {
         player2Auto.enabled = isSinglePlayer;
@@ -161,7 +170,7 @@ public class GameManager : MonoBehaviour
 
         launchDirectionX = -1;
 
-        ResetPositions();
+        ResetPositions(true);
         ChangePaddleSizes(true);
 
         if (player1Goals == pointsToWin)
@@ -170,6 +179,10 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            if (player2Auto.enabled)
+            {
+                player2Auto.StateMachine.TransitionTo(player2Auto.StateMachine.Launch);
+            }
             state = GameState.Ready;
         }
     }
@@ -182,7 +195,7 @@ public class GameManager : MonoBehaviour
 
         launchDirectionX = 1;
 
-        ResetPositions();
+        ResetPositions(false);
         ChangePaddleSizes(false);
 
         if (player2Goals == pointsToWin)
@@ -202,12 +215,12 @@ public class GameManager : MonoBehaviour
         player2Paddle.ChangeSize(player1Change * -1);
     }
 
-    public void ResetPositions()
+    public void ResetPositions(bool player1Scored)
     {
         ball.ResetPosition();
         player1Paddle.ResetPosition();
         player2Paddle.ResetPosition();
-        launchText.gameObject.SetActive(true);
+        launchText.gameObject.SetActive(player2Manual.enabled || !player1Scored);
     }
 
     private void ShowWinner(bool isPlayer1)
