@@ -15,25 +15,36 @@ public class UserDataManager : PersistentSingleton<UserDataManager>
     {
         get { return startLives; }
     }
+    public int Score
+    {
+        get { return score; }
+    }
 
     private int lives;
+    private int score;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ResetLives();
+        ResetData();
     }
 
     // Update is called once per frame
     void Update() { }
 
-    public void ResetLives()
+    public void ResetData()
     {
         lives = startLives;
+        score = 0;
     }
 
     public void LoseLive()
     {
         lives--;
+    }
+
+    public void AddScore()
+    {
+        score++;
     }
 }

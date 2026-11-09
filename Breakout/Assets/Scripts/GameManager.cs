@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -20,6 +21,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> powerUpPrefabs = new List<GameObject>(2);
 
+    [SerializeField]
+    private TextMeshProUGUI scoreText;
+
     private UserDataManager userDataManager;
     private int currentScene;
 
@@ -36,7 +40,7 @@ public class GameManager : MonoBehaviour
 
         if (currentScene == 1)
         {
-            userDataManager.ResetLives();
+            userDataManager.ResetData();
         }
     }
 
@@ -44,6 +48,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         bricksLeft = GameObject.FindGameObjectsWithTag("Brick").Length;
+        scoreText.text = UserDataManager.Instance.Score.ToString();
 
         for (int i = 0; i < userDataManager.MaxLives; i++)
         {
@@ -120,6 +125,10 @@ public class GameManager : MonoBehaviour
     public void ManageBreakingBrick(Vector2 position)
     {
         bricksLeft--;
+
+        UserDataManager.Instance.AddScore();
+        scoreText.text = UserDataManager.Instance.Score.ToString();
+
         if (bricksLeft == 0)
         {
             GoNextScene();
