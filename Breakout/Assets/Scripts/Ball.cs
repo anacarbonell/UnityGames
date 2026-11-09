@@ -12,6 +12,9 @@ public class Ball : MonoBehaviour
     [SerializeField]
     private float minVerticalSpeed = 1.5f;
 
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
+
     public Transform paddle;
     public GameManager gameManager;
     public bool launchAtStart;
@@ -23,6 +26,7 @@ public class Ball : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -81,6 +85,23 @@ public class Ball : MonoBehaviour
         {
             gameManager.DestroyBall();
             Destroy(gameObject);
+        }
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        spriteRenderer.sprite = sprite;
+    }
+
+    public void SetLevel(int level)
+    {
+        if (level == 0)
+        {
+            initialSpeed -= 2f;
+        }
+        else if (level == 2)
+        {
+            initialSpeed += 2f;
         }
     }
 }

@@ -24,5 +24,10 @@ public class TitleManager : MonoBehaviour
                 SceneManager.LoadScene(0);
             }
         }
+
+        if (Keyboard.current[Key.I].wasPressedThisFrame && isTitle)
+        {
+            SceneManager.LoadScene(4);
+        }
     }
 }

@@ -13,6 +13,9 @@ public class Paddle : MonoBehaviour
     [SerializeField]
     private AudioClip paddleHitClip;
 
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
+
     public GameManager gameManager;
 
     private Rigidbody2D rb;
@@ -25,6 +28,7 @@ public class Paddle : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -85,6 +89,27 @@ public class Paddle : MonoBehaviour
             Destroy(powerUp);
             speedIsBoosted = true;
             speed = boostSpeed;
+        }
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        spriteRenderer.sprite = sprite;
+    }
+
+    public void SetLevel(int level)
+    {
+        if (level == 0)
+        {
+            normalSpeed += 1f;
+            boostSpeed += 2.5f;
+            speed = normalSpeed;
+        }
+        else if (level == 2)
+        {
+            normalSpeed -= 1f;
+            boostSpeed -= 2.5f;
+            speed = normalSpeed;
         }
     }
 }

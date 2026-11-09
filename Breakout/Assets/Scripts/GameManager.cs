@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     private int currentScene;
 
     private List<Heart> hearts = new List<Heart>();
-    private GameObject paddle;
+    private Paddle paddle;
     private int bricksLeft;
     private List<GameObject> powerUps = new List<GameObject>();
     private int ballsLeft = 0;
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     private void LoseLive()
     {
-        Destroy(paddle);
+        Destroy(paddle.gameObject);
         userDataManager.LoseLive();
         for (int i = hearts.Count; i > userDataManager.Lives; i--)
         {
@@ -159,8 +159,10 @@ public class GameManager : MonoBehaviour
 
     private void InstantiatePrefabs()
     {
-        paddle = Instantiate(paddlePrefab);
-        paddle.GetComponent<Paddle>().gameManager = this;
+        paddle = Instantiate(paddlePrefab).GetComponent<Paddle>();
+        paddle.gameManager = this;
+        paddle.SetSprite(UserDataManager.Instance.PaddleSprite);
+        paddle.SetLevel(UserDataManager.Instance.Level);
         AddBall(false);
     }
 
@@ -169,6 +171,8 @@ public class GameManager : MonoBehaviour
         Ball ball = Instantiate(ballPrefab).GetComponent<Ball>();
         ball.paddle = paddle.transform;
         ball.gameManager = this;
+        ball.SetSprite(UserDataManager.Instance.BallSprite);
+        ball.SetLevel(UserDataManager.Instance.Level);
         ball.launchAtStart = launch;
         ballsLeft++;
     }
