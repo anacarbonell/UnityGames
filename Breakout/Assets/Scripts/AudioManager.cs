@@ -5,7 +5,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
 {
     private AudioSource audioSource;
 
-    void Awake()
+    protected override void Awake()
     {
         base.Awake();
         audioSource = GetComponent<AudioSource>();
