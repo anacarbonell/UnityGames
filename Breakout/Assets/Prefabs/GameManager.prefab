@@ -49,5 +49,7 @@ MonoBehaviour:
   paddlePrefab: {fileID: 7030623204448561445, guid: 49805e1b06f511f9b8d1f1392584bcfa, type: 3}
   levelChangeClip: {fileID: 8300000, guid: c1e6a6c7756c6895882b4b65b5803cc4, type: 3}
   powerUpPrefabs:
+  - {fileID: 222012657501909254, guid: 54f5f93b4a389ef13af1329e030bad45, type: 3}
+  - {fileID: 222012657501909254, guid: 44cbdd038fe73f80196a8fd378991dca, type: 3}
   - {fileID: 6359497063636292524, guid: 4492f699bdce204f389efee3d9fa8646, type: 3}
   scoreText: {fileID: 0}

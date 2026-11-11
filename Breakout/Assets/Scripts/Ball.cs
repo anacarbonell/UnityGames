@@ -88,6 +88,14 @@ public class Ball : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Paddle") && launched)
+        {
+            rb.linearVelocityX = (transform.position.x - collision.transform.position.x) * 2;
+        }
+    }
+
     public void SetSprite(Sprite sprite)
     {
         spriteRenderer.sprite = sprite;

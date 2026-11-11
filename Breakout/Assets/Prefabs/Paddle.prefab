@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8375281008039615364}
   m_Layer: 0
   m_Name: Paddle
-  m_TagString: Untagged
+  m_TagString: Paddle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,5 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7287d2a43766f7aab68945a8d2489a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Paddle
-  speed: 5
+  normalSpeed: 5
+  boostSpeed: 15
   paddleHitClip: {fileID: 8300000, guid: 2b6b7f463c3f38bb6a44940f727ae99b, type: 3}
+  spriteRenderer: {fileID: 0}
+  gameManager: {fileID: 0}

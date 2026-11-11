@@ -10,6 +10,7 @@ TagManager:
   - PowerUp_0
   - PowerUp_1
   - PowerUp_2
+  - Paddle
   layers:
   - Default
   - TransparentFX
