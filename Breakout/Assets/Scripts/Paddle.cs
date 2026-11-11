@@ -24,6 +24,9 @@ public class Paddle : MonoBehaviour
     private bool speedIsBoosted;
     private float speedTimer;
     private float speedTime = 9f;
+    private bool widthIsBoosted;
+    private float widthTimer;
+    private float widthTime = 9f;
 
     void Awake()
     {
@@ -61,6 +64,17 @@ public class Paddle : MonoBehaviour
                 speed = normalSpeed;
             }
         }
+
+        if (widthIsBoosted)
+        {
+            widthTimer += Time.deltaTime;
+            if (widthTimer > widthTime)
+            {
+                widthIsBoosted = false;
+                widthTimer = 0;
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+        }
     }
 
     void FixedUpdate()
@@ -89,6 +103,14 @@ public class Paddle : MonoBehaviour
             Destroy(powerUp);
             speedIsBoosted = true;
             speed = boostSpeed;
+            speedTimer = 0f;
+        }
+        else if (powerUp.CompareTag("PowerUp_2"))
+        {
+            Destroy(powerUp);
+            widthIsBoosted = true;
+            transform.localScale = new Vector3(1.25f, 1, 1);
+            widthTimer = 0f;
         }
     }
 

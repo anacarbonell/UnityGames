@@ -9,6 +9,7 @@ TagManager:
   - Brick
   - PowerUp_0
   - PowerUp_1
+  - PowerUp_2
   layers:
   - Default
   - TransparentFX
