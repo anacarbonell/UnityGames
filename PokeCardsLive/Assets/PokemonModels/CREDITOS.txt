@@ -1,0 +1,9 @@
+Modelos 3D de Pokémon para PokéCardsLive (RVRA, curso 26-27)
+
+- Spheal: nguyenlouis32 en Sketchfab
+  https://sketchfab.com/3d-models/spheal-8ab6ff52e9d047e6b076c0b1e68b059a
+- Arcanine: nguyenlouis32 en Sketchfab
+  https://sketchfab.com/3d-models/arcanine-82c02a3bc6294f94b4423ae454a7b2aa
+
+Pokémon es una marca de Nintendo, Game Freak y Creatures Inc.
+Material solo para uso educativo: los proyectos que lo usen no se publican.
