@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI scoreText;
 
+    [SerializeField]
+    private GameObject pauseCanvas;
+
     private UserDataManager userDataManager;
     private int currentScene;
 
@@ -87,6 +90,8 @@ public class GameManager : MonoBehaviour
                 powerUps.RemoveAt(i);
             }
         }
+
+        pauseCanvas.SetActive(PauseManager.Instance.GameIsPaused);
     }
 
     public void DestroyBall()

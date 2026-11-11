@@ -38,7 +38,11 @@ public class Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!launched && Keyboard.current[Key.Space].wasPressedThisFrame)
+        if (
+            !PauseManager.Instance.GameIsPaused
+            && Keyboard.current[Key.Space].wasPressedThisFrame
+            && !launched
+        )
         {
             launchRequested = true;
         }
