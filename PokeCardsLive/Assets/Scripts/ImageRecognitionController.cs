@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class ImageRecognitionController : MonoBehaviour
 {
@@ -42,11 +43,18 @@ public class ImageRecognitionController : MonoBehaviour
     {
         foreach (ARTrackedImage trackedImage in args.added)
         {
-            Debug.Log("POKECARDSLIVE Detectada: " + trackedImage.referenceImage.name);
             UpdateImage(trackedImage);
+            Debug.Log("POKECARDSLIVE Detectada: " + trackedImage.referenceImage.name);
         }
         foreach (ARTrackedImage trackedImage in args.updated)
+        {
             UpdateImage(trackedImage);
+        }
+        foreach (var removed in args.removed)
+        {
+            Debug.Log("POKECARDSLIVE Elimina: " + removed.Value.referenceImage.name);
+            HideImage(removed.Value);
+        }
     }
 
     private void UpdateImage(ARTrackedImage trackedImage)
@@ -56,11 +64,27 @@ public class ImageRecognitionController : MonoBehaviour
         if (imageName != null && pokemons.ContainsKey(imageName))
         {
             GameObject pokemon = pokemons[imageName];
-            pokemon.transform.position = trackedImage.transform.position;
-            pokemon.transform.rotation = trackedImage.transform.rotation;
-            pokemon.SetActive(true);
+            if (trackedImage.trackingState == TrackingState.Tracking)
+            {
+                pokemon.transform.position = trackedImage.transform.position;
+                pokemon.transform.rotation = trackedImage.transform.rotation;
+                pokemon.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("POKECARDSLIVE Desaparece: " + imageName);
+                pokemon.SetActive(false);
+            }
+        }
+    }
 
-            Debug.Log("POKECARDSLIVE Detectada: " + imageName);
+    private void HideImage(ARTrackedImage trackedImage)
+    {
+        string imageName = trackedImage.referenceImage.name;
+
+        if (imageName != null && pokemons.ContainsKey(imageName))
+        {
+            pokemons[imageName].SetActive(false);
         }
     }
 }
