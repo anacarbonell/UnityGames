@@ -1,0 +1,6 @@
+Sonidos de «80 CC0 creature SFX», de rubberduck (OpenGameArt), con licencia
+CC0 (dominio público): https://opengameart.org/content/80-cc0-creature-sfx
+
+- Pikachu.ogg  = cute_03.ogg
+- Spheal.ogg   = burble_01.ogg
+- Arcanine.ogg = barking_02.ogg

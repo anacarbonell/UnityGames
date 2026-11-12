@@ -10,4 +10,5 @@ public class PokemonData : ScriptableObject
 
     [TextArea]
     public string description;
+    public AudioClip sound;
 }

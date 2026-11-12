@@ -19,13 +19,25 @@ public class ImageRecognitionController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI infoText;
 
+    [SerializeField]
+    private GameObject showCanvas;
+
+    [SerializeField]
+    private TextMeshProUGUI showText;
+
+    private AudioSource audioSource;
+
     private Dictionary<string, GameObject> pokemons = new Dictionary<string, GameObject>();
     private Dictionary<string, PokemonData> infoPokemons = new Dictionary<string, PokemonData>();
 
     private string infoShowing = "";
+    private float showTimer = 0f;
+    private float showTime = 3f;
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+
         foreach (PokemonData data in pokemonData)
         {
             GameObject prefab = Instantiate(data.prefab);
@@ -49,7 +61,18 @@ public class ImageRecognitionController : MonoBehaviour
     void Start() { }
 
     // Update is called once per frame
-    void Update() { }
+    void Update()
+    {
+        if (showTimer > 0)
+        {
+            showTimer -= Time.deltaTime;
+            if (showTimer <= 0)
+            {
+                showTimer = 0f;
+                showCanvas.SetActive(false);
+            }
+        }
+    }
 
     private void OnTrackedImagesChanged(ARTrackablesChangedEventArgs<ARTrackedImage> args)
     {
@@ -78,22 +101,34 @@ public class ImageRecognitionController : MonoBehaviour
             GameObject pokemon = pokemons[imageName];
             if (trackedImage.trackingState == TrackingState.Tracking)
             {
+                if (infoPokemons.ContainsKey(imageName))
+                {
+                    PokemonData infoPokemon = infoPokemons[imageName];
+
+                    if (!pokemon.activeSelf)
+                    {
+                        showText.text = "¡Un " + infoPokemon.displayName + " salvaje ha aparecido!";
+                        showTimer = showTime;
+                        showCanvas.SetActive(true);
+                        audioSource.PlayOneShot(infoPokemon.sound);
+                    }
+
+                    if (infoShowing == "")
+                    {
+                        infoShowing = imageName;
+                        infoText.text =
+                            infoPokemon.displayName
+                            + "\nTipo: "
+                            + infoPokemon.type
+                            + "\n"
+                            + infoPokemon.description;
+                        infoCanvas.SetActive(true);
+                    }
+                }
+
                 pokemon.transform.position = trackedImage.transform.position;
                 pokemon.transform.rotation = trackedImage.transform.rotation;
                 pokemon.SetActive(true);
-
-                if (infoShowing == "" && infoPokemons.ContainsKey(imageName))
-                {
-                    PokemonData infoPokemon = infoPokemons[imageName];
-                    infoShowing = imageName;
-                    infoText.text =
-                        infoPokemon.displayName
-                        + "\nTipo: "
-                        + infoPokemon.type
-                        + "\n"
-                        + infoPokemon.description;
-                    infoCanvas.SetActive(true);
-                }
             }
             else
             {
