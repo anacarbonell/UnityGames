@@ -19,3 +19,15 @@ MonoBehaviour:
   description: "La gruesa capa de grasa bajo la piel le confiere una forma perfectamente
     esf\xE9rica. Se desplaza m\xE1s r\xE1pido rodando que caminando."
   sound: {fileID: 8300000, guid: 9103b782c42737ded8083c8166ddfd6b, type: 3}
+  questions:
+  - "\xBFCu\xE1l es su siguiente evoluci\xF3n?"
+  - "\xBFContra qu\xE9 tipo es fuerte?"
+  - "\xBFContra qu\xE9 tipo es d\xE9bil?"
+  correctAnswers:
+  - Sealeo
+  - Tierra
+  - "El\xE9ctrico"
+  wrongAnswers:
+  - Walrein
+  - Lucha
+  - Volador

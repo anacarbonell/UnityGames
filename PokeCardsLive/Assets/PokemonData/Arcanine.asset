@@ -19,3 +19,15 @@ MonoBehaviour:
   description: Cuenta un antiguo pergamino que la gente se quedaba fascinada al verlo
     correr por las praderas.
   sound: {fileID: 8300000, guid: 92f48c4436069e65181619780a465966, type: 3}
+  questions:
+  - "\xBFCu\xE1l es su anterior evoluci\xF3n?"
+  - "\xBFContra qu\xE9 tipo es fuerte?"
+  - "\xBFContra qu\xE9 tipo es d\xE9bil?"
+  correctAnswers:
+  - Growlithe
+  - Planta
+  - Agua
+  wrongAnswers:
+  - Piplup
+  - Roca
+  - Hielo

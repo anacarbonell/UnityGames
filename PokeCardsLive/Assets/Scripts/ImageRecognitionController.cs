@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,12 +24,38 @@ public class ImageRecognitionController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI showText;
 
+    [SerializeField]
+    private GameObject quizButton;
+
+    [SerializeField]
+    private GameObject quizPanel;
+
+    [SerializeField]
+    private GameObject finishPanel;
+
+    [SerializeField]
+    private TextMeshProUGUI questionText;
+
+    [SerializeField]
+    private TextMeshProUGUI answerOneText;
+
+    [SerializeField]
+    private TextMeshProUGUI answerTwoText;
+
+    [SerializeField]
+    private TextMeshProUGUI finishText;
+
     private AudioSource audioSource;
 
     private Dictionary<string, GameObject> pokemons = new Dictionary<string, GameObject>();
     private Dictionary<string, PokemonData> infoPokemons = new Dictionary<string, PokemonData>();
 
     private string infoShowing = "";
+    private string pokemonQuiz = "";
+    private int questionsLeft = 3;
+    private int correctAnswer = 0;
+    private float quizTimer = 0f;
+    private float quizTime = 3f;
     private float showTimer = 0f;
     private float showTime = 3f;
 
@@ -70,6 +95,16 @@ public class ImageRecognitionController : MonoBehaviour
             {
                 showTimer = 0f;
                 showCanvas.SetActive(false);
+            }
+        }
+
+        if (quizTimer > 0)
+        {
+            quizTimer -= Time.deltaTime;
+            if (quizTimer <= 0)
+            {
+                quizTimer = 0f;
+                finishPanel.SetActive(false);
             }
         }
     }
@@ -123,6 +158,11 @@ public class ImageRecognitionController : MonoBehaviour
                             + "\n"
                             + infoPokemon.description;
                         infoCanvas.SetActive(true);
+
+                        if (!quizPanel.activeSelf)
+                        {
+                            quizButton.SetActive(true);
+                        }
                     }
                 }
 
@@ -156,6 +196,57 @@ public class ImageRecognitionController : MonoBehaviour
         {
             infoShowing = "";
             infoCanvas.SetActive(false);
+            quizButton.SetActive(false);
+        }
+    }
+
+    public void ShowQuiz()
+    {
+        pokemonQuiz = infoShowing;
+        quizButton.SetActive(false);
+
+        questionsLeft = 3;
+        SetQuizQuestion();
+        quizPanel.SetActive(true);
+    }
+
+    public void AnswerQuiz(int answer)
+    {
+        questionsLeft--;
+        if (answer == correctAnswer && questionsLeft > 0)
+        {
+            SetQuizQuestion();
+        }
+        else
+        {
+            PokemonData pokemon = infoPokemons[pokemonQuiz];
+            if (infoPokemons.ContainsKey(pokemonQuiz))
+            {
+                finishText.text =
+                    answer != correctAnswer
+                        ? pokemon.displayName + " se ha escapado"
+                        : "Has capturado un " + pokemon.displayName + " salvaje.";
+            }
+
+            quizTimer = quizTime;
+            quizPanel.SetActive(false);
+            finishPanel.SetActive(true);
+        }
+    }
+
+    private void SetQuizQuestion()
+    {
+        PokemonData pokemon = infoPokemons[pokemonQuiz];
+        if (infoPokemons.ContainsKey(pokemonQuiz))
+        {
+            int index = 3 - questionsLeft;
+            correctAnswer = Random.Range(0, 2);
+
+            questionText.text = pokemon.questions[index];
+            answerOneText.text =
+                correctAnswer == 0 ? pokemon.correctAnswers[index] : pokemon.wrongAnswers[index];
+            answerTwoText.text =
+                correctAnswer == 0 ? pokemon.wrongAnswers[index] : pokemon.correctAnswers[index];
         }
     }
 }

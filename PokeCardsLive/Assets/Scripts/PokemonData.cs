@@ -11,4 +11,8 @@ public class PokemonData : ScriptableObject
     [TextArea]
     public string description;
     public AudioClip sound;
+
+    public string[] questions;
+    public string[] correctAnswers;
+    public string[] wrongAnswers;
 }

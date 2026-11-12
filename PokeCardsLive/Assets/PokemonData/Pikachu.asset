@@ -19,3 +19,15 @@ MonoBehaviour:
   description: "Las bolsas de las mejillas est\xE1n llenas de electricidad, que libera
     cuando se siente amenazado."
   sound: {fileID: 8300000, guid: 89c9b9ac0da0b9d158283596f14121e3, type: 3}
+  questions:
+  - "\xBFCu\xE1l es su anterior evoluci\xF3n?"
+  - "\xBFContra qu\xE9 tipo es fuerte?"
+  - "\xBFContra qu\xE9 tipo es d\xE9bil?"
+  correctAnswers:
+  - Pichu
+  - Agua
+  - Tierra
+  wrongAnswers:
+  - Raichu
+  - Planta
+  - Volador
