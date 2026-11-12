@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PokemonData
   imageName: Arcanine
   prefab: {fileID: 2733620963627666863, guid: 5e8f2d22768e8ebf8b96eb507757e607, type: 3}
+  displayName: Arcanine
+  type: Fuego
+  description: Cuenta un antiguo pergamino que la gente se quedaba fascinada al verlo
+    correr por las praderas.
+  sound: {fileID: 8300000, guid: 92f48c4436069e65181619780a465966, type: 3}

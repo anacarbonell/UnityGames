@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PokemonData
   imageName: Spheal
   prefab: {fileID: 4888008322066420689, guid: 296ac183cf64fe6d88f5ead911a56be4, type: 3}
+  displayName: Spheal
+  type: Hielo y Agua
+  description: "La gruesa capa de grasa bajo la piel le confiere una forma perfectamente
+    esf\xE9rica. Se desplaza m\xE1s r\xE1pido rodando que caminando."
+  sound: {fileID: 8300000, guid: 9103b782c42737ded8083c8166ddfd6b, type: 3}

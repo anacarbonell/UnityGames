@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -11,7 +13,16 @@ public class ImageRecognitionController : MonoBehaviour
     [SerializeField]
     private PokemonData[] pokemonData;
 
+    [SerializeField]
+    private GameObject infoCanvas;
+
+    [SerializeField]
+    private TextMeshProUGUI infoText;
+
     private Dictionary<string, GameObject> pokemons = new Dictionary<string, GameObject>();
+    private Dictionary<string, PokemonData> infoPokemons = new Dictionary<string, PokemonData>();
+
+    private string infoShowing = "";
 
     void Awake()
     {
@@ -20,6 +31,7 @@ public class ImageRecognitionController : MonoBehaviour
             GameObject prefab = Instantiate(data.prefab);
             prefab.SetActive(false);
             pokemons.Add(data.imageName, prefab);
+            infoPokemons.Add(data.imageName, data);
         }
     }
 
@@ -69,11 +81,24 @@ public class ImageRecognitionController : MonoBehaviour
                 pokemon.transform.position = trackedImage.transform.position;
                 pokemon.transform.rotation = trackedImage.transform.rotation;
                 pokemon.SetActive(true);
+
+                if (infoShowing == "" && infoPokemons.ContainsKey(imageName))
+                {
+                    PokemonData infoPokemon = infoPokemons[imageName];
+                    infoShowing = imageName;
+                    infoText.text =
+                        infoPokemon.displayName
+                        + "\nTipo: "
+                        + infoPokemon.type
+                        + "\n"
+                        + infoPokemon.description;
+                    infoCanvas.SetActive(true);
+                }
             }
             else
             {
                 Debug.Log("POKECARDSLIVE Desaparece: " + imageName);
-                pokemon.SetActive(false);
+                HidePokemon(imageName);
             }
         }
     }
@@ -84,7 +109,18 @@ public class ImageRecognitionController : MonoBehaviour
 
         if (imageName != null && pokemons.ContainsKey(imageName))
         {
-            pokemons[imageName].SetActive(false);
+            HidePokemon(imageName);
+        }
+    }
+
+    private void HidePokemon(string imageName)
+    {
+        pokemons[imageName].SetActive(false);
+
+        if (infoShowing.Equals(imageName))
+        {
+            infoShowing = "";
+            infoCanvas.SetActive(false);
         }
     }
 }
