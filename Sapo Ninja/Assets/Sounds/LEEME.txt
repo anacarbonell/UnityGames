@@ -1,0 +1,14 @@
+Sonidos de la Actividad 5.1 · Plataformas: el sapo ninja
+Programación y motores de videojuegos · Curso 26-27
+
+Sounds/
+  Salto.wav, Huaya.wav, die.wav
+    Grabaciones hechas para este curso, para usarlas en las actividades
+    del módulo.
+  phaseJump1.ogg … phaseJump5.ogg, highUp.ogg, lowDown.ogg
+    Pack «Digital Audio», de Kenney (www.kenney.nl).
+    Licencia Creative Commons Zero (CC0).
+    https://kenney.nl/assets/digital-audio
+
+El pack de gráficos «Pixel Adventure 1», de Pixel Frog, no está aquí:
+se consigue gratis en la Unity Asset Store (lo explica el hito 0).
