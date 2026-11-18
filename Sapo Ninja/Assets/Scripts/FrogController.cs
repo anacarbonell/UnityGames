@@ -1,23 +1,62 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum FrogState
+{
+    Grounded,
+    Jumping,
+}
+
 public class FrogController : MonoBehaviour
 {
+    [Header("Movimiento")]
     [SerializeField]
     private float speed = 5f;
 
-    private Rigidbody2D rb;
-    private Animator animator;
+    [SerializeField]
+    private float jumpSpeed = 6f;
+
+    [Header("Detección del suelo y las paredes")]
+    [SerializeField]
+    private float castDistance = 0.05f;
+
+    [SerializeField]
+    private LayerMask mapLayer;
+
+    [Header("Sonidos")]
+    [SerializeField]
+    private AudioClip jumpClip;
+
+    [Header("Estado (solo para verlo en el inspector)")]
+    [SerializeField]
+    private FrogState state = FrogState.Grounded;
+
+    const float MinNormal = 0.5f;
 
     static readonly int RunningParam = Animator.StringToHash("Running");
+    static readonly int GroundedParam = Animator.StringToHash("Grounded");
+
+    private Rigidbody2D rb;
+    private Animator animator;
+    private BoxCollider2D boxCollider;
+    private AudioSource audioSource;
 
     private float movement = 0f;
     private bool facingRight = true;
+    private bool jumpPressed = false;
+    private bool grounded = true;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    void Start()
+    {
+        ChangeState(state);
     }
 
     void Update()
@@ -35,11 +74,56 @@ public class FrogController : MonoBehaviour
         }
 
         animator.SetBool(RunningParam, movement != 0);
+
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            jumpPressed = true;
+        }
     }
 
     void FixedUpdate()
     {
+        grounded = IsGrounded();
+
+        switch (state)
+        {
+            case FrogState.Grounded:
+                UpdateGrounded();
+                break;
+            case FrogState.Jumping:
+                UpdateJumping();
+                break;
+        }
+
+        jumpPressed = false;
+    }
+
+    private void UpdateGrounded()
+    {
         MoveHorizontally();
+        if (jumpPressed)
+        {
+            Jump();
+        }
+        if (!grounded)
+        {
+            ChangeState(FrogState.Jumping);
+        }
+    }
+
+    private void UpdateJumping()
+    {
+        MoveHorizontally();
+        if (IsLanding())
+        {
+            ChangeState(FrogState.Grounded);
+        }
+    }
+
+    private void ChangeState(FrogState newState)
+    {
+        state = newState;
+        animator.SetBool(GroundedParam, state == FrogState.Grounded);
     }
 
     private void MoveHorizontally()
@@ -55,5 +139,50 @@ public class FrogController : MonoBehaviour
     {
         facingRight = !facingRight;
         transform.localScale = new Vector3(facingRight ? 1 : -1, 1, 1);
+    }
+
+    private void Jump()
+    {
+        rb.linearVelocityY = jumpSpeed;
+        audioSource.PlayOneShot(jumpClip);
+        ChangeState(FrogState.Jumping);
+    }
+
+    private bool IsGrounded()
+    {
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0,
+            Vector2.down,
+            castDistance,
+            mapLayer
+        );
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.normal.y >= MinNormal)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool IsLanding()
+    {
+        return grounded && rb.linearVelocityY <= 0;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (boxCollider != null)
+        {
+            Gizmos.color = grounded ? Color.green : Color.red;
+            Gizmos.DrawWireCube(
+                boxCollider.bounds.center + Vector3.down * castDistance,
+                boxCollider.bounds.size
+            );
+        }
     }
 }
