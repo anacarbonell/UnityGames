@@ -16,6 +16,9 @@ public class FrogController : MonoBehaviour
     [SerializeField]
     private float jumpSpeed = 6f;
 
+    [SerializeField]
+    private float maxJumpHoldTime = 0.2f;
+
     [Header("Detección del suelo y las paredes")]
     [SerializeField]
     private float castDistance = 0.05f;
@@ -45,6 +48,8 @@ public class FrogController : MonoBehaviour
     private bool facingRight = true;
     private bool jumpPressed = false;
     private bool grounded = true;
+    private bool jumpHeld;
+    private float jumpHoldTimer;
 
     void Awake()
     {
@@ -79,6 +84,8 @@ public class FrogController : MonoBehaviour
         {
             jumpPressed = true;
         }
+
+        jumpHeld = Keyboard.current.spaceKey.isPressed;
     }
 
     void FixedUpdate()
@@ -114,6 +121,7 @@ public class FrogController : MonoBehaviour
     private void UpdateJumping()
     {
         MoveHorizontally();
+        SustainJump();
         if (IsLanding())
         {
             ChangeState(FrogState.Grounded);
@@ -143,9 +151,23 @@ public class FrogController : MonoBehaviour
 
     private void Jump()
     {
+        jumpHoldTimer = maxJumpHoldTime;
         rb.linearVelocityY = jumpSpeed;
         audioSource.PlayOneShot(jumpClip);
         ChangeState(FrogState.Jumping);
+    }
+
+    private void SustainJump()
+    {
+        if (jumpHeld && jumpHoldTimer > 0 && rb.linearVelocityY > 0)
+        {
+            rb.linearVelocityY = jumpSpeed;
+            jumpHoldTimer -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            jumpHoldTimer = 0f;
+        }
     }
 
     private bool IsGrounded()
