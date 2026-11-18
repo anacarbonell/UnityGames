@@ -5,6 +5,7 @@ public enum FrogState
 {
     Grounded,
     Jumping,
+    DoubleJumping,
 }
 
 public class FrogController : MonoBehaviour
@@ -15,6 +16,9 @@ public class FrogController : MonoBehaviour
 
     [SerializeField]
     private float jumpSpeed = 6f;
+
+    [SerializeField]
+    private float doubleJumpSpeed = 5f;
 
     [SerializeField]
     private float maxJumpHoldTime = 0.2f;
@@ -30,6 +34,9 @@ public class FrogController : MonoBehaviour
     [SerializeField]
     private AudioClip jumpClip;
 
+    [SerializeField]
+    private AudioClip doubleJumpClip;
+
     [Header("Estado (solo para verlo en el inspector)")]
     [SerializeField]
     private FrogState state = FrogState.Grounded;
@@ -38,6 +45,7 @@ public class FrogController : MonoBehaviour
 
     static readonly int RunningParam = Animator.StringToHash("Running");
     static readonly int GroundedParam = Animator.StringToHash("Grounded");
+    static readonly int DoubleJumpingParam = Animator.StringToHash("DoubleJumping");
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -100,6 +108,9 @@ public class FrogController : MonoBehaviour
             case FrogState.Jumping:
                 UpdateJumping();
                 break;
+            case FrogState.DoubleJumping:
+                UpdateDoubleJumping();
+                break;
         }
 
         jumpPressed = false;
@@ -126,12 +137,29 @@ public class FrogController : MonoBehaviour
         {
             ChangeState(FrogState.Grounded);
         }
+        if (jumpPressed)
+        {
+            DoubleJump();
+        }
+    }
+
+    private void UpdateDoubleJumping()
+    {
+        MoveHorizontally();
+        if (IsLanding())
+        {
+            ChangeState(FrogState.Grounded);
+        }
     }
 
     private void ChangeState(FrogState newState)
     {
         state = newState;
         animator.SetBool(GroundedParam, state == FrogState.Grounded);
+        if (state == FrogState.DoubleJumping)
+        {
+            animator.SetTrigger(DoubleJumpingParam);
+        }
     }
 
     private void MoveHorizontally()
@@ -155,6 +183,13 @@ public class FrogController : MonoBehaviour
         rb.linearVelocityY = jumpSpeed;
         audioSource.PlayOneShot(jumpClip);
         ChangeState(FrogState.Jumping);
+    }
+
+    private void DoubleJump()
+    {
+        rb.linearVelocityY = doubleJumpSpeed;
+        audioSource.PlayOneShot(doubleJumpClip);
+        ChangeState(FrogState.DoubleJumping);
     }
 
     private void SustainJump()

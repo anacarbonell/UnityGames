@@ -523,11 +523,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   speed: 5
   jumpSpeed: 6
+  doubleJumpSpeed: 5
+  maxJumpHoldTime: 0.2
   castDistance: 0.05
   mapLayer:
     serializedVersion: 2
     m_Bits: 64
   jumpClip: {fileID: 8300000, guid: 8b080835ca588c1239356822e2b32204, type: 3}
+  doubleJumpClip: {fileID: 8300000, guid: 966d3b075f818d0169f84a548ebcf02a, type: 3}
   state: 0
 --- !u!95 &692630205
 Animator:
