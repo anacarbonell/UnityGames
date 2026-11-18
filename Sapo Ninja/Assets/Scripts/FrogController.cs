@@ -7,12 +7,17 @@ public class FrogController : MonoBehaviour
     private float speed = 5f;
 
     private Rigidbody2D rb;
+    private Animator animator;
+
+    static readonly int RunningParam = Animator.StringToHash("Running");
+
     private float movement = 0f;
     private bool facingRight = true;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -28,6 +33,8 @@ public class FrogController : MonoBehaviour
         {
             movement += 1f;
         }
+
+        animator.SetBool(RunningParam, movement != 0);
     }
 
     void FixedUpdate()
