@@ -6,6 +6,7 @@ public enum FrogState
     Grounded,
     Jumping,
     DoubleJumping,
+    OnWall,
 }
 
 public class FrogController : MonoBehaviour
@@ -22,6 +23,12 @@ public class FrogController : MonoBehaviour
 
     [SerializeField]
     private float maxJumpHoldTime = 0.2f;
+
+    [SerializeField]
+    private float wallJumpPushSpeed = 4f;
+
+    [SerializeField]
+    private float wallJumpControlLockTime = 0.15f;
 
     [Header("Detección del suelo y las paredes")]
     [SerializeField]
@@ -46,6 +53,7 @@ public class FrogController : MonoBehaviour
     static readonly int RunningParam = Animator.StringToHash("Running");
     static readonly int GroundedParam = Animator.StringToHash("Grounded");
     static readonly int DoubleJumpingParam = Animator.StringToHash("DoubleJumping");
+    static readonly int OnWallParam = Animator.StringToHash("OnWall");
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -56,8 +64,11 @@ public class FrogController : MonoBehaviour
     private bool facingRight = true;
     private bool jumpPressed = false;
     private bool grounded = true;
+    private int wallSide = 0;
+    private int lastWallSide = 0;
     private bool jumpHeld;
     private float jumpHoldTimer;
+    private float wallJumpLockTimer;
 
     void Awake()
     {
@@ -100,6 +111,15 @@ public class FrogController : MonoBehaviour
     {
         grounded = IsGrounded();
 
+        if (!grounded && IsTouchingWall())
+        {
+            wallSide = facingRight ? 1 : -1;
+        }
+        else
+        {
+            wallSide = 0;
+        }
+
         switch (state)
         {
             case FrogState.Grounded:
@@ -110,6 +130,9 @@ public class FrogController : MonoBehaviour
                 break;
             case FrogState.DoubleJumping:
                 UpdateDoubleJumping();
+                break;
+            case FrogState.OnWall:
+                UpdateOnWall();
                 break;
         }
 
@@ -123,7 +146,7 @@ public class FrogController : MonoBehaviour
         {
             Jump();
         }
-        if (!grounded)
+        else if (!grounded)
         {
             ChangeState(FrogState.Jumping);
         }
@@ -133,13 +156,17 @@ public class FrogController : MonoBehaviour
     {
         MoveHorizontally();
         SustainJump();
-        if (IsLanding())
-        {
-            ChangeState(FrogState.Grounded);
-        }
         if (jumpPressed)
         {
             DoubleJump();
+        }
+        else if (IsLanding())
+        {
+            ChangeState(FrogState.Grounded);
+        }
+        else if (!grounded && wallSide != 0 && CanGrabWall())
+        {
+            ChangeState(FrogState.OnWall);
         }
     }
 
@@ -150,20 +177,61 @@ public class FrogController : MonoBehaviour
         {
             ChangeState(FrogState.Grounded);
         }
+        else if (!grounded && wallSide != 0 && CanGrabWall())
+        {
+            ChangeState(FrogState.OnWall);
+        }
+    }
+
+    private void UpdateOnWall()
+    {
+        if (jumpPressed)
+        {
+            WallJump();
+        }
+        else if (IsLanding())
+        {
+            ChangeState(FrogState.Grounded);
+        }
+        else if (wallSide == 0)
+        {
+            ChangeState(FrogState.Jumping);
+        }
+        MoveHorizontally();
+        SustainJump();
     }
 
     private void ChangeState(FrogState newState)
     {
         state = newState;
         animator.SetBool(GroundedParam, state == FrogState.Grounded);
+        animator.SetBool(OnWallParam, state == FrogState.OnWall);
         if (state == FrogState.DoubleJumping)
         {
             animator.SetTrigger(DoubleJumpingParam);
+        }
+        if (state == FrogState.Grounded)
+        {
+            lastWallSide = 0;
+        }
+        if (state == FrogState.OnWall)
+        {
+            lastWallSide = wallSide;
         }
     }
 
     private void MoveHorizontally()
     {
+        if (!grounded && wallJumpLockTimer > 0)
+        {
+            wallJumpLockTimer -= Time.fixedDeltaTime;
+            return;
+        }
+        else
+        {
+            wallJumpLockTimer = 0;
+        }
+
         rb.linearVelocityX = movement * speed;
         if (movement > 0 && !facingRight || movement < 0 && facingRight)
         {
@@ -188,6 +256,17 @@ public class FrogController : MonoBehaviour
     private void DoubleJump()
     {
         rb.linearVelocityY = doubleJumpSpeed;
+        audioSource.PlayOneShot(doubleJumpClip);
+        ChangeState(FrogState.DoubleJumping);
+    }
+
+    private void WallJump()
+    {
+        Flip();
+        float direction = facingRight ? 1 : -1;
+        rb.linearVelocity = new Vector2(direction * wallJumpPushSpeed, wallJumpPushSpeed);
+        jumpHoldTimer = 0f;
+        wallJumpLockTimer = wallJumpControlLockTime;
         audioSource.PlayOneShot(doubleJumpClip);
         ChangeState(FrogState.DoubleJumping);
     }
@@ -231,6 +310,32 @@ public class FrogController : MonoBehaviour
         return grounded && rb.linearVelocityY <= 0;
     }
 
+    private bool IsTouchingWall()
+    {
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0,
+            facingRight ? Vector2.right : Vector2.left,
+            castDistance,
+            mapLayer
+        );
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (Mathf.Abs(hit.normal.y) <= MinNormal)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool CanGrabWall()
+    {
+        return wallSide != lastWallSide;
+    }
+
     void OnDrawGizmos()
     {
         if (boxCollider != null)
@@ -238,6 +343,13 @@ public class FrogController : MonoBehaviour
             Gizmos.color = grounded ? Color.green : Color.red;
             Gizmos.DrawWireCube(
                 boxCollider.bounds.center + Vector3.down * castDistance,
+                boxCollider.bounds.size
+            );
+
+            Gizmos.color = wallSide != 0 ? Color.green : Color.red;
+            Gizmos.DrawWireCube(
+                boxCollider.bounds.center
+                    + (facingRight ? Vector3.right : Vector3.left) * castDistance,
                 boxCollider.bounds.size
             );
         }
