@@ -30,6 +30,9 @@ public class FrogController : MonoBehaviour
     [SerializeField]
     private float wallJumpControlLockTime = 0.15f;
 
+    [SerializeField]
+    private float wallSpeed = -0.75f;
+
     [Header("Detección del suelo y las paredes")]
     [SerializeField]
     private float castDistance = 0.05f;
@@ -196,6 +199,10 @@ public class FrogController : MonoBehaviour
         else if (wallSide == 0)
         {
             ChangeState(FrogState.Jumping);
+        }
+        if (rb.linearVelocityY <= wallSpeed)
+        {
+            rb.linearVelocityY = wallSpeed;
         }
         MoveHorizontally();
         SustainJump();

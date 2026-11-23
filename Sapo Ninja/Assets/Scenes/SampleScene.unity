@@ -665,6 +665,7 @@ MonoBehaviour:
   maxJumpHoldTime: 0.2
   wallJumpPushSpeed: 4
   wallJumpControlLockTime: 0.15
+  wallSpeed: -0.75
   castDistance: 0.05
   mapLayer:
     serializedVersion: 2
