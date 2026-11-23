@@ -51,7 +51,8 @@ public class FrogController : MonoBehaviour
     [SerializeField]
     private FrogState state = FrogState.Grounded;
 
-    const float MinNormal = 0.5f;
+    private const float MinNormal = 0.5f;
+    private const float MaxLandingSpeedY = 0.1f;
 
     static readonly int RunningParam = Animator.StringToHash("Running");
     static readonly int GroundedParam = Animator.StringToHash("Grounded");
@@ -323,7 +324,7 @@ public class FrogController : MonoBehaviour
 
     private bool IsLanding()
     {
-        return grounded && rb.linearVelocityY <= 0;
+        return grounded && rb.linearVelocityY <= MaxLandingSpeedY;
     }
 
     private bool IsTouchingWall()
