@@ -57,6 +57,7 @@ public class FrogController : MonoBehaviour
     static readonly int GroundedParam = Animator.StringToHash("Grounded");
     static readonly int DoubleJumpingParam = Animator.StringToHash("DoubleJumping");
     static readonly int OnWallParam = Animator.StringToHash("OnWall");
+    static readonly int VelocityYParam = Animator.StringToHash("VelocityY");
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -159,6 +160,8 @@ public class FrogController : MonoBehaviour
     {
         MoveHorizontally();
         SustainJump();
+        animator.SetFloat(VelocityYParam, rb.linearVelocityY);
+
         if (jumpPressed)
         {
             DoubleJump();
@@ -176,6 +179,8 @@ public class FrogController : MonoBehaviour
     private void UpdateDoubleJumping()
     {
         MoveHorizontally();
+        animator.SetFloat(VelocityYParam, rb.linearVelocityY);
+
         if (IsLanding())
         {
             ChangeState(FrogState.Grounded);
@@ -224,6 +229,10 @@ public class FrogController : MonoBehaviour
         if (state == FrogState.OnWall)
         {
             lastWallSide = wallSide;
+        }
+        if (state == FrogState.Jumping)
+        {
+            animator.SetFloat(VelocityYParam, 0);
         }
     }
 
