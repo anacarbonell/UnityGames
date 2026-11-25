@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public enum FrogState
 {
@@ -7,6 +8,7 @@ public enum FrogState
     Jumping,
     DoubleJumping,
     OnWall,
+    Dead,
 }
 
 public class FrogController : MonoBehaviour
@@ -31,7 +33,10 @@ public class FrogController : MonoBehaviour
     private float wallJumpControlLockTime = 0.15f;
 
     [SerializeField]
-    private float wallSpeed = -0.75f;
+    private float wallSpeed = -1.25f;
+
+    [SerializeField]
+    private float deathTime = 0.5f;
 
     [Header("Detección del suelo y las paredes")]
     [SerializeField]
@@ -47,6 +52,9 @@ public class FrogController : MonoBehaviour
     [SerializeField]
     private AudioClip doubleJumpClip;
 
+    [SerializeField]
+    private AudioClip deathClip;
+
     [Header("Estado (solo para verlo en el inspector)")]
     [SerializeField]
     private FrogState state = FrogState.Grounded;
@@ -59,6 +67,7 @@ public class FrogController : MonoBehaviour
     static readonly int DoubleJumpingParam = Animator.StringToHash("DoubleJumping");
     static readonly int OnWallParam = Animator.StringToHash("OnWall");
     static readonly int VelocityYParam = Animator.StringToHash("VelocityY");
+    static readonly int DieParam = Animator.StringToHash("Die");
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -74,6 +83,7 @@ public class FrogController : MonoBehaviour
     private bool jumpHeld;
     private float jumpHoldTimer;
     private float wallJumpLockTimer;
+    private float deathTimer;
 
     void Awake()
     {
@@ -138,6 +148,9 @@ public class FrogController : MonoBehaviour
                 break;
             case FrogState.OnWall:
                 UpdateOnWall();
+                break;
+            case FrogState.Dead:
+                UpdateDead();
                 break;
         }
 
@@ -214,6 +227,18 @@ public class FrogController : MonoBehaviour
         SustainJump();
     }
 
+    private void UpdateDead()
+    {
+        if (deathTimer > 0)
+        {
+            deathTimer -= Time.fixedDeltaTime;
+            if (deathTimer <= 0)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+    }
+
     private void ChangeState(FrogState newState)
     {
         state = newState;
@@ -234,6 +259,14 @@ public class FrogController : MonoBehaviour
         if (state == FrogState.Jumping)
         {
             animator.SetFloat(VelocityYParam, 0);
+        }
+        if (state == FrogState.Dead)
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.linearVelocity = Vector2.zero;
+            audioSource.PlayOneShot(deathClip);
+            animator.SetTrigger(DieParam);
+            deathTimer = deathTime;
         }
     }
 
@@ -286,6 +319,14 @@ public class FrogController : MonoBehaviour
         wallJumpLockTimer = wallJumpControlLockTime;
         audioSource.PlayOneShot(doubleJumpClip);
         ChangeState(FrogState.DoubleJumping);
+    }
+
+    private void Die()
+    {
+        if (state != FrogState.Dead)
+        {
+            ChangeState(FrogState.Dead);
+        }
     }
 
     private void SustainJump()
@@ -369,6 +410,14 @@ public class FrogController : MonoBehaviour
                     + (facingRight ? Vector3.right : Vector3.left) * castDistance,
                 boxCollider.bounds.size
             );
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Deadly"))
+        {
+            Die();
         }
     }
 }
