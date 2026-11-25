@@ -381,7 +381,7 @@ public class FrogController : MonoBehaviour
 
         foreach (RaycastHit2D hit in hits)
         {
-            if (Mathf.Abs(hit.normal.y) <= MinNormal)
+            if (Mathf.Abs(hit.normal.x) >= MinNormal)
             {
                 return true;
             }
@@ -416,6 +416,14 @@ public class FrogController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Deadly"))
+        {
+            Die();
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Deadly"))
         {
             Die();
         }
