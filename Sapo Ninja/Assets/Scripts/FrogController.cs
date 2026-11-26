@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -73,6 +74,7 @@ public class FrogController : MonoBehaviour
     private Animator animator;
     private BoxCollider2D boxCollider;
     private AudioSource audioSource;
+    private CinemachineImpulseSource impulseSource;
 
     private float movement = 0f;
     private bool facingRight = true;
@@ -91,6 +93,7 @@ public class FrogController : MonoBehaviour
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
         audioSource = GetComponent<AudioSource>();
+        impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     void Start()
@@ -325,6 +328,7 @@ public class FrogController : MonoBehaviour
     {
         if (state != FrogState.Dead)
         {
+            impulseSource.GenerateImpulse();
             ChangeState(FrogState.Dead);
         }
     }
