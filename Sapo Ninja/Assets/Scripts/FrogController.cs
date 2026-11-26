@@ -423,6 +423,10 @@ public class FrogController : MonoBehaviour
         {
             Die();
         }
+        if (collision.CompareTag("Fruit"))
+        {
+            GameManager.Instance.AddFruit();
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
