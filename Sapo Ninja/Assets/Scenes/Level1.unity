@@ -18707,13 +18707,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 561550851161223410, guid: 50c61992517f36629957121319d960fb, type: 3}
-      propertyPath: Target.TrackingTarget
-      value: 
-      objectReference: {fileID: 692630203}
     - target: {fileID: 904725492918716829, guid: 50c61992517f36629957121319d960fb, type: 3}
       propertyPath: m_Name
       value: Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 1776931818365253515, guid: 50c61992517f36629957121319d960fb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.5555558
+      objectReference: {fileID: 0}
+    - target: {fileID: 1776931818365253515, guid: 50c61992517f36629957121319d960fb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 2190079633682466060, guid: 50c61992517f36629957121319d960fb, type: 3}
       propertyPath: BoundingShape2D
@@ -18759,6 +18763,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5574992028094552303, guid: 50c61992517f36629957121319d960fb, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 692630203}
     - target: {fileID: 7990550993090933947, guid: 50c61992517f36629957121319d960fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.388889
